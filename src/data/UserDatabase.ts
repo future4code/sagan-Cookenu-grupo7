@@ -52,4 +52,23 @@ export class UserDatabase extends BaseDatabase {
       
   }
 
+  public async followUser(followingId: string, followedId: string): Promise<any> {
+    await this.getConnection()
+      .insert({
+        id_user_following: followingId,
+        id_user_followed: followedId
+      })
+      .into("Follow");
+  }
+
+  public async unfollowUser(followingId: string, unfollowedId: string): Promise<any> {
+    await this.getConnection()
+    .delete()
+    .from("Follow")
+    .where({
+      id_user_following: followingId,
+      id_user_followed: unfollowedId
+    })
+  }
+
 }

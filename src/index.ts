@@ -7,7 +7,9 @@ import { getProfile } from "./endPoints/getProfile";
 import { deleEndpoint } from "./endPoints/deleteEndpoint";
 import { getProfileId } from "./endPoints/getProfileId";
 import { newRecipe } from "./endPoints/newRecipe";
-import { getFeed } from "./endPoints/getFeed"
+import { getFeed } from "./endPoints/getFeed";
+import { followUser } from "./endPoints/followUser";
+import { unfollowUser } from "./endPoints/unfollowUser";
 
 dotenv.config();
 
@@ -37,3 +39,7 @@ app.get("/user/feed", getFeed)
 app.get("/user/:id", getProfileId)
 
 app.post("/recipe", newRecipe)
+
+app.post("/user/follow", followUser)
+
+app.post("/user/unfollow", unfollowUser)
