@@ -7,6 +7,7 @@ import { getProfile } from "./endPoints/getProfile";
 import { deleEndpoint } from "./endPoints/deleteEndpoint";
 import { getProfileId } from "./endPoints/getProfileId";
 import { newRecipe } from "./endPoints/newRecipe";
+import { getFeed } from "./endPoints/getFeed"
 
 dotenv.config();
 
@@ -30,6 +31,8 @@ app.post("/login", loginEndpoint)
 app.get("/user/profile", getProfile)
 
 app.delete("/user/:id", deleEndpoint)
+
+app.get("/user/feed", getFeed)
 
 app.get("/user/:id", getProfileId)
 
