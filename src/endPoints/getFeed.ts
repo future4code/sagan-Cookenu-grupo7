@@ -11,7 +11,7 @@ export const getFeed = async (req: Request, res: Response): Promise<void> => {
         const token = req.headers.authorization as string;
     
         const authenticator = new Authenticator();
-        const authenticationData = authenticator.getData(token);
+        const authenticationData = authenticator.verify(token);
     
         if (authenticationData.role !== "normal") {
           throw new Error("Você não tem autorização para acessar este recurso.");

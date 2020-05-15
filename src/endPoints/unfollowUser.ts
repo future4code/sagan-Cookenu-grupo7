@@ -11,7 +11,7 @@ export const unfollowUser = async (req: Request, res: Response): Promise<void> =
     }
 
     const authenticator = new Authenticator();
-    const authenticationData = authenticator.getData(token);
+    const authenticationData = authenticator.verify(token);
 
     const newUnfollowUser = new FollowDatabase();
     await newUnfollowUser.unfollowUser(authenticationData.id, dataUnfollow.userToUnfollowId)

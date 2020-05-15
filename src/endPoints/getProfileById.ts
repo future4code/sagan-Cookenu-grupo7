@@ -9,7 +9,7 @@ export const getProfileById = async (req: Request, res: Response) => {
     const id = req.params.id;
 
     const authenticator = new Authenticator();
-    const authenticationData = authenticator.getData(token);
+    const authenticationData = authenticator.verify(token);
     if (authenticationData.id !== id) {
       throw Error("O token fornecido não é valido ou está expirado!");
     }

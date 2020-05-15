@@ -13,6 +13,7 @@ import { unfollowUser } from "./endPoints/unfollowUser";
 import { getRecipeById } from "./endPoints/getRecipeById";
 import { editRecipeEndpoint } from "./endPoints/editRecipeEndpoint";
 import { deleteRecipe } from "./endPoints/deleteRecipe";
+import { refreshAccessTokenEndpoint } from "./endPoints/refreshAccessTokenEndpoint";
 
 dotenv.config();
 
@@ -52,3 +53,5 @@ app.get("/recipe/:id", getRecipeById)
 app.post("/user/follow", followUser)
 
 app.post("/user/unfollow", unfollowUser)
+
+app.post("/refresh/token", refreshAccessTokenEndpoint)
