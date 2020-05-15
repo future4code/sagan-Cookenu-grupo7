@@ -3,12 +3,14 @@ import { UserDatabase } from "../data/UserDatabase";
 import { Authenticator } from "../services/Authenticator ";
 import { Request, Response } from "express";
 import { BaseDatabase } from "../data/BaseDatabase";
+import { RefreshTokenDatabase } from "../data/RefreshTokenDatabase";
 
 export const loginEndpoint = async (req: Request, res: Response) => {
   try {
     const userData = {
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      device: req.body.device
     }
 
     if (userData.password.length < 6 || userData.email.length === 0 && !userData.email.includes("@")) {
@@ -23,18 +25,45 @@ export const loginEndpoint = async (req: Request, res: Response) => {
       userData.password,
       user.password
     );
-    
+
     if (!comapreResult) {
       throw new Error('Oooops! Senha incorreta.');
     }
 
     const authenticator = new Authenticator();
-    const token = authenticator.generateToken({
+    const acessToken = authenticator.generateToken({
       id: user.id,
       role: user.role
-    });
+    },
+      process.env.REFRESH_TOKEN_EXPIRE_IN
+    )
 
-    res.status(200).send({ token });
+    const refreshToken = authenticator.generateToken(
+      {
+        id: user.id,
+        device: userData.device
+      },
+      process.env.REFRESH_TOKEN_EXPIRE_IN
+    )
+
+    const refreshTokenDb = new RefreshTokenDatabase();
+
+    const refreshTokenFromDb = await refreshTokenDb
+      .getRefreshTokenByUserIdAndDevice(user.id, userData.device)
+
+
+    if (refreshTokenFromDb !== undefined) {
+      await refreshTokenDb.deleteRefreshToken(refreshTokenFromDb.refreshToken)
+    }
+
+    await refreshTokenDb.createRefreshToken(
+      refreshToken,
+      userData.device,
+      true,
+      user.id
+    )
+
+    res.status(200).send({ acessToken, refreshToken });
 
 
   } catch (err) {

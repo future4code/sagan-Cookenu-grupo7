@@ -4,6 +4,7 @@ import { UserDatabase } from "../data/UserDatabase";
 import { Authenticator } from "../services/Authenticator ";
 import { Request, Response } from "express";
 import { BaseDatabase } from "../data/BaseDatabase";
+import { RefreshTokenDatabase } from "../data/RefreshTokenDatabase";
 
 export const signupEndpoint = async (req: Request, res: Response) => {
   try {
@@ -11,7 +12,8 @@ export const signupEndpoint = async (req: Request, res: Response) => {
       email: req.body.email,
       password: req.body.password,
       role: req.body.role,
-      name: req.body.name
+      name: req.body.name,
+      device: req.body.device,
     }
 
     if (userData.password.length < 6 || userData.email.length === 0 && !userData.email.includes("@")) {
@@ -24,16 +26,31 @@ export const signupEndpoint = async (req: Request, res: Response) => {
       const idGenerator: any = new IdGenerator();
       const id: string = idGenerator.generate();
 
-      const userDatabase: any = new UserDatabase();
-      await userDatabase.createUser(id, userData.email, hashPassword, userData.role, userData.name);
+      const userDb: any = new UserDatabase();
+      await userDb.createUser(id, userData.email, hashPassword, userData.role, userData.name);
 
       const authenticator = new Authenticator()
-      const token = authenticator.generateToken({
-        id,
-        role: userData.role
-      });
 
-      res.status(200).send({ token });
+      const accessToken = authenticator.generateToken(
+        {
+          id,
+          role: userData.role,
+        },
+        process.env.ACESS_TOKEN_EXPIRES_IN
+      )
+
+      const refreshToken = authenticator.generateToken(
+        {
+          id,
+          device: userData.device,
+        },
+        process.env.REFRESH_TOKEN_EXPIRE_IN
+      )
+
+      const refreshTokenDb = new RefreshTokenDatabase();
+      await refreshTokenDb.createRefreshToken(refreshToken, userData.device, true, id);
+
+      res.status(200).send({ accessToken, refreshToken });
     }
   } catch (err) {
     res.status(402).send({

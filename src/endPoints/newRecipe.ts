@@ -18,7 +18,7 @@ export const newRecipe = async (req: Request, res: Response): Promise<void> => {
     const createDate: string = moment().format("YYYY-MM-DD");
 
     const authenticator = new Authenticator();
-    const authenticationData = authenticator.getData(token);
+    const authenticationData = authenticator.verify(token);
 
     const idGenerator = new IdGenerator();
     const id: string = idGenerator.generate();

@@ -12,7 +12,7 @@ export const followUser = async (req: Request, res: Response): Promise<void> => 
     }
 
     const authenticator = new Authenticator();
-    const authenticationData = authenticator.getData(token);
+    const authenticationData = authenticator.verify(token);
 
     const newFollowUser = new FollowDatabase();
     await newFollowUser.followUser(authenticationData.id, dataFollow.userToFollowId)
