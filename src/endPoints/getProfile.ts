@@ -1,5 +1,3 @@
-import { HashManager } from "../services/HashManager";
-import { IdGenerator } from "../services/IdGenerator";
 import { UserDatabase } from "../data/UserDatabase";
 import { Authenticator } from "../services/Authenticator ";
 import { Request, Response } from "express";
@@ -18,7 +16,7 @@ export const getProfile = async (req: Request, res: Response) => {
     }
 
     const userDb = new UserDatabase();
-    const user = await userDb.getUserId(authenticationData.id);
+    const user = await userDb.getProfileById(authenticationData.id);
 
     res.status(200).send({
       id: user.id,

@@ -1,8 +1,6 @@
-import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
 import { Authenticator } from "../services/Authenticator ";
 import { Request, Response } from "express";
-import { BaseDatabase } from "../data/BaseDatabase";
 import { RecipesDatabase } from "../data/RecipesDatabase";
 import moment from 'moment';
 
@@ -17,12 +15,12 @@ export const newRecipe = async (req: Request, res: Response): Promise<void> => {
       create_date: req.body.createDate
     }
 
-    const createDate: string = moment(dataRecipe.create_date, "DD/MM/YYYY").format("YYYY-MM-DD");
+    const createDate: string = moment().format("YYYY-MM-DD");
 
     const authenticator = new Authenticator();
     const authenticationData = authenticator.getData(token);
 
-    const idGenerator: any = new IdGenerator();
+    const idGenerator = new IdGenerator();
     const id: string = idGenerator.generate();
 
     const newRecipesDatabase = new RecipesDatabase();

@@ -1,12 +1,6 @@
-import { HashManager } from "../services/HashManager";
-import { IdGenerator } from "../services/IdGenerator";
 import { Authenticator } from "../services/Authenticator ";
 import { Request, Response } from "express";
-import { BaseDatabase } from "../data/BaseDatabase";
-import { RecipesDatabase } from "../data/RecipesDatabase";
-import moment from 'moment';
-import { UserDatabase } from "../data/UserDatabase";
-
+import { FollowDatabase } from "../data/FollowDatabase";
 
 export const unfollowUser = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -19,7 +13,7 @@ export const unfollowUser = async (req: Request, res: Response): Promise<void> =
     const authenticator = new Authenticator();
     const authenticationData = authenticator.getData(token);
 
-    const newUnfollowUser = new UserDatabase();
+    const newUnfollowUser = new FollowDatabase();
     await newUnfollowUser.unfollowUser(authenticationData.id, dataUnfollow.userToUnfollowId)
 
     res.status(200).send({
