@@ -1,11 +1,6 @@
-import { HashManager } from "../services/HashManager";
-import { IdGenerator } from "../services/IdGenerator";
 import { Authenticator } from "../services/Authenticator ";
 import { Request, Response } from "express";
-import { BaseDatabase } from "../data/BaseDatabase";
-import { RecipesDatabase } from "../data/RecipesDatabase";
-import moment from 'moment';
-import { UserDatabase } from "../data/UserDatabase";
+import { FollowDatabase } from "../data/FollowDatabase";
 
 
 export const followUser = async (req: Request, res: Response): Promise<void> => {
@@ -19,7 +14,7 @@ export const followUser = async (req: Request, res: Response): Promise<void> => 
     const authenticator = new Authenticator();
     const authenticationData = authenticator.getData(token);
 
-    const newFollowUser = new UserDatabase();
+    const newFollowUser = new FollowDatabase();
     await newFollowUser.followUser(authenticationData.id, dataFollow.userToFollowId)
 
     res.status(200).send({

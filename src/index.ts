@@ -4,12 +4,13 @@ import { AddressInfo } from "net";
 import { signupEndpoint } from "./endPoints/singupEndpoint";
 import { loginEndpoint } from "./endPoints/loginEndpoint";
 import { getProfile } from "./endPoints/getProfile";
-import { deleEndpoint } from "./endPoints/deleteEndpoint";
-import { getProfileId } from "./endPoints/getProfileId";
+import { deleteProfileEndpoint } from "./endPoints/deleteProfileEndpoint";
+import { getProfileById } from "./endPoints/getProfileById";
 import { newRecipe } from "./endPoints/newRecipe";
 import { getFeed } from "./endPoints/getFeed";
 import { followUser } from "./endPoints/followUser";
 import { unfollowUser } from "./endPoints/unfollowUser";
+import { getRecipeById } from "./endPoints/getRecipeById";
 
 dotenv.config();
 
@@ -32,13 +33,15 @@ app.post("/login", loginEndpoint)
 
 app.get("/user/profile", getProfile)
 
-app.delete("/user/:id", deleEndpoint)
+app.delete("/user/:id", deleteProfileEndpoint)
 
 app.get("/user/feed", getFeed)
 
-app.get("/user/:id", getProfileId)
+app.get("/user/:id", getProfileById)
 
 app.post("/recipe", newRecipe)
+
+app.get("/recipe/:id", getRecipeById)
 
 app.post("/user/follow", followUser)
 

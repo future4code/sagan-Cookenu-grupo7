@@ -32,4 +32,23 @@ export class RecipesDatabase extends BaseDatabase {
       userName: recipe.name
     }})
   }
+
+  public async getRecipeById(id: string): Promise<any> {
+    const result = await this.getConnection()
+      .select("*")
+      .from(RecipesDatabase.TABLE_NAME)
+      .where({ id })
+
+    return result[0];
+  }
+
+  public async edit(idRecipe: string, title: string, description: string): Promise<void> {
+    await this.getConnection()
+      .from(RecipesDatabase.TABLE_NAME)
+      .update({
+        title,
+        description
+      })
+      .where({ id: idRecipe })
+  }
 }
